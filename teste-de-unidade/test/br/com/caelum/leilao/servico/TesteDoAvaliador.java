@@ -8,6 +8,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import br.com.caelum.leilao.builder.LeilaoBuilder;
 import br.com.caelum.leilao.dominio.Lance;
 import br.com.caelum.leilao.dominio.Leilao;
 import br.com.caelum.leilao.dominio.Usuario;
@@ -21,10 +22,10 @@ public class TesteDoAvaliador {
 		this.leiloeiro = new Avaliador();
 		System.out.println("inicializando teste!");
 	}
-	
+
 	@After
 	public void finaliza() {
-	  System.out.println("fim");
+		System.out.println("fim");
 	}
 
 	@Test
@@ -34,11 +35,7 @@ public class TesteDoAvaliador {
 		Usuario jose = new Usuario("José");
 		Usuario maria = new Usuario("Maria");
 
-		Leilao leilao = new Leilao("Playstation 3 Novo");
-
-		leilao.propoe(new Lance(joao, 250.0));
-		leilao.propoe(new Lance(jose, 300.0));
-		leilao.propoe(new Lance(maria, 400.0));
+		Leilao leilao = new LeilaoBuilder("Play 3").lance(joao, 250.0).lance(joao, 300.0).lance(maria, 400.0).build();
 
 		// Parte 2: Ação
 		leiloeiro.avalia(leilao);
@@ -54,9 +51,8 @@ public class TesteDoAvaliador {
 	@Test
 	public void deveEntenderLeilaoComAPenasUmLance() {
 		Usuario joao = new Usuario("João");
-		Leilao leilao = new Leilao("Playstation 3 Novo");
-
-		leilao.propoe(new Lance(joao, 1000.0));
+		
+		Leilao leilao = new LeilaoBuilder("Parachoque do Gol").lance(joao, 1000.0).build();
 
 		leiloeiro.avalia(leilao);
 
@@ -68,14 +64,13 @@ public class TesteDoAvaliador {
 	public void deveEncontrarOsTresMaioresLances() {
 		// Parte 1: cenário
 		Usuario joao = new Usuario("João");
-		Usuario maria = new Usuario("Maria");
 
-		Leilao leilao = new Leilao("Playstation 3 Novo");
-
-		leilao.propoe(new Lance(joao, 100.0));
-		leilao.propoe(new Lance(joao, 200.0));
-		leilao.propoe(new Lance(joao, 300.0));
-		leilao.propoe(new Lance(joao, 400.0));
+		Leilao leilao = new LeilaoBuilder("Parachoque do Gol")
+				.lance(joao, 100.0)
+				.lance(joao, 200.0)
+				.lance(joao, 300.0)
+				.lance(joao, 400.0)
+				.build();
 
 		leiloeiro.avalia(leilao);
 
@@ -92,14 +87,14 @@ public class TesteDoAvaliador {
 		Usuario jaqueline = new Usuario("Jaqueline");
 		Usuario pascoal = new Usuario("Pascoal");
 
-		Leilao leilao = new Leilao("Parachoque do Gol");
-
-		leilao.propoe(new Lance(joao, 200.0));
-		leilao.propoe(new Lance(jaqueline, 450.0));
-		leilao.propoe(new Lance(pascoal, 120.0));
-		leilao.propoe(new Lance(joao, 700.0));
-		leilao.propoe(new Lance(jaqueline, 630.0));
-		leilao.propoe(new Lance(pascoal, 230.0));
+		Leilao leilao = new LeilaoBuilder("Parachoque do Gol")
+				.lance(joao, 200.0)
+				.lance(jaqueline, 450.0)
+				.lance(pascoal, 120.0)
+				.lance(joao, 700.0)
+				.lance(jaqueline, 630.0)
+				.lance(pascoal, 230.0)
+				.build();
 
 		leiloeiro.avalia(leilao);
 
@@ -110,14 +105,9 @@ public class TesteDoAvaliador {
 	@Test
 	public void deveEntenderLancesDecrescentes() {
 		Usuario joao = new Usuario("João");
-		Usuario jaqueline = new Usuario("Jaqueline");
 
-		Leilao leilao = new Leilao("Parachoque do Gol");
-
-		leilao.propoe(new Lance(joao, 400.0));
-		leilao.propoe(new Lance(joao, 300.0));
-		leilao.propoe(new Lance(joao, 200.0));
-		leilao.propoe(new Lance(joao, 100.0));
+		Leilao leilao = new LeilaoBuilder("Parachoque do Gol").lance(joao, 400.0).lance(joao, 300.0).lance(joao, 200.0)
+				.lance(joao, 100.0).build();
 
 		leilao.getLances().forEach(l -> {
 			System.out.println(l.getUsuario().getNome());
@@ -133,15 +123,14 @@ public class TesteDoAvaliador {
 	public void deveEncontrarMaioresComCincoLances() {
 		// Parte 1: cenário
 		Usuario joao = new Usuario("João");
-		Usuario maria = new Usuario("Maria");
 
-		Leilao leilao = new Leilao("Playstation 3 Novo");
-
-		leilao.propoe(new Lance(joao, 100.0));
-		leilao.propoe(new Lance(joao, 200.0));
-		leilao.propoe(new Lance(joao, 300.0));
-		leilao.propoe(new Lance(joao, 400.0));
-		leilao.propoe(new Lance(joao, 500.0));
+		Leilao leilao = new LeilaoBuilder("Parachoque do Gol")
+				.lance(joao, 100.0)
+				.lance(joao, 200.0)
+				.lance(joao, 300.0)
+				.lance(joao, 400.0)
+				.lance(joao, 500.0)
+				.build();
 
 		leiloeiro.avalia(leilao);
 
@@ -158,12 +147,11 @@ public class TesteDoAvaliador {
 	public void deveEncontrarMaioresComDoisLances() {
 		// Parte 1: cenário
 		Usuario joao = new Usuario("João");
-		Usuario maria = new Usuario("Maria");
 
-		Leilao leilao = new Leilao("Playstation 3 Novo");
-
-		leilao.propoe(new Lance(joao, 100.0));
-		leilao.propoe(new Lance(joao, 200.0));
+		Leilao leilao = new LeilaoBuilder("Parachoque do Gol")
+				.lance(joao, 100.0)
+				.lance(joao, 200.0)
+				.build();
 
 		leiloeiro.avalia(leilao);
 
@@ -177,10 +165,8 @@ public class TesteDoAvaliador {
 	@Test
 	public void deveEncontrarMaioresComNenhumLance() {
 		// Parte 1: cenário
-		Usuario joao = new Usuario("João");
-		Usuario maria = new Usuario("Maria");
-
-		Leilao leilao = new Leilao("Playstation 3 Novo");
+		Leilao leilao = new LeilaoBuilder("Parachoque do Gol")
+				.build();
 
 		leiloeiro.avalia(leilao);
 
